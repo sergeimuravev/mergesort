@@ -3,4 +3,4 @@ Buffered merge sort implementation. The merge procedure is modified to use fixed
 
 ## Benchmarks
 There are a few benchmarks eliminating perfomance degradation vs memory consumption, see below:
-<img src="benchmarks.jpg"></img>
+<img src="Benchmarks.jpg"></img>
