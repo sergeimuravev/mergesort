@@ -53,6 +53,8 @@ func benchmarkMergeSort(
 		data = append(data, rand.Intn(10000))
 	}
 
+	b.ResetTimer()
+
 	for n := 0; n < b.N; n++ {
 		ms := mergesort.BufferedMergeSort{make([]int, bufferSize), isRecursive}
 		ms.Sort(data)
