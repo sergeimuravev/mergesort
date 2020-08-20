@@ -1,9 +1,11 @@
 package mergesort_test
 
 import (
-	"github.com/sergeimuravev/mergesort"
 	"math/rand"
+	"sort"
 	"testing"
+
+	"github.com/sergeimuravev/mergesort"
 )
 
 func TestMergeSort(t *testing.T) {
@@ -18,11 +20,9 @@ func TestMergeSort(t *testing.T) {
 		ms.Sort(data)
 		t.Logf("After sorting: %v", data)
 
-		for i := 1; i < len(data); i++ {
-			if data[i] < data[i-1] {
-				t.Error("Sequence not sorted.")
-				break
-			}
+		if !sort.IsSorted(sort.IntSlice(data)) {
+			t.Error("Sequence not sorted.")
+			break
 		}
 	}
 }
@@ -48,15 +48,22 @@ func benchmarkMergeSort(
 	bufferSize int,
 	isRecursive bool) {
 
-	data := make([]int, 0)
-	for i := 0; i < 1e6; i++ {
-		data = append(data, rand.Intn(10000))
-	}
-
-	b.ResetTimer()
-
+	const size = 1e6 // sample set size
 	for n := 0; n < b.N; n++ {
+		b.StopTimer()
+		data := make([]int, 0)
+		for i := 0; i < size; i++ {
+			data = append(data, rand.Intn(1000))
+		}
+		b.StartTimer()
+
 		ms := mergesort.BufferedMergeSort{make([]int, bufferSize), isRecursive}
 		ms.Sort(data)
+
+		b.StopTimer()
+		if !sort.IsSorted(sort.IntSlice(data)) {
+			panic("Sequence not sorted.")
+		}
+		b.StartTimer()
 	}
 }
